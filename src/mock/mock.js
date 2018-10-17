@@ -4,7 +4,7 @@ const Mock = require('mockjs')
 
 
 Mock.setup({
-    timeout: 800, // 设置延迟响应，模拟向后端请求数据
+    timeout: 300, // 设置延迟响应，模拟向后端请求数据
    });
     
    const data =  [
@@ -46,5 +46,8 @@ Mock.setup({
       sex:1
     }
   ];
-   // Mock.mock( url, post/get , 返回的数据)；
+  const userInfo = {userName:"张三",logName:"zhangsan",部门:"研发"};
+   // Mock.mock( url, post/get , 返回的数据)； 
    Mock.mock('/home/getList', 'get', data);
+
+   Mock.mock('/api/getUserInfo', 'get', userInfo);

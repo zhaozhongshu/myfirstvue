@@ -94,14 +94,6 @@
 
 <script>
 export default {
-  methods: {
-    handleClick(row) {
-      console.log(row);
-    },queryDate(){
-
-    }
-  },
-
   data() {
     return {
       name:"",
@@ -124,7 +116,13 @@ export default {
     this.axios.get('/home/getList').then((res) => {
       this.tableData = res.data;
        console.log(res)
-})
+    });
+     /*this.axios.get('/api/getUserInfo').then((res) => {
+       this.$store.state.logUseInfo = res.data;
+        console.log( this.$store.state.logUseInfo);
+       // commit('setLogUseInfo', res.data);
+      })*/
+    this.$store.dispatch('initLogUserInfo');
   }
 };
 </script>
