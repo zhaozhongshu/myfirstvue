@@ -2,10 +2,11 @@
   <div id="app">
     <el-container>
           <my-header></my-header>
-          <div id="nav">
+          <my-menu></my-menu>
+          <!--<div id="nav">
             <router-link to="/">Home</router-link> |
               <router-link to="/about/aboutChild1">About</router-link>
-           </div>
+           </div>-->
           <el-main class="content-wap"><router-view/></el-main>
           <el-footer><my-footer></my-footer></el-footer>
     </el-container>
@@ -14,11 +15,13 @@
 <script>
 import MyHeader from "@/components/head";
 import MyFooter from "@/components/footer";
+import MyMenu from "@/components/menu";
 
 export default {
   components: {
     MyHeader,
-    MyFooter
+    MyFooter,
+    MyMenu
   }
 };
 </script>

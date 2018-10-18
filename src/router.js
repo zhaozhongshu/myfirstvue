@@ -16,6 +16,10 @@ Vue.use(Router)
       name: 'home',
       component: Home
     },{
+      path: '/home',
+      name: 'home',
+      component: Home
+    },{
       path:"/newWinHome/:id",
       component: HomeDetail
 

@@ -3,29 +3,6 @@
 </template>
 
 
-<script>
-export default {
-  data() {
-    return {
-        realName:''
-    };
-  },
-  methods: {},
-  computed: {
-    logName() {
-      return this.$store.getters.getLogName;
-    }
-  },
-
-  mounted() {
-    this.axios.get("/api/getUserInfo").then(res => {
-      this.$store.state.logUseInfo = res.data;
-      this.realName = this.$store.state.logUseInfo.userName;
-    });
-    //this.$store.dispatch('initLogUserInfo');
-  }
-};
-</script>
 
 <style   lang="scss" scoped>
 
