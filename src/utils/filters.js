@@ -6,5 +6,12 @@ export  default{
            return "男";
        }
     },
-
+    showSexUpdatefilter:(param) =>{
+        console.log(param)
+        if(param.sex=="女"){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

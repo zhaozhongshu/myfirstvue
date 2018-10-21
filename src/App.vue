@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
           <my-header></my-header>
-          <my-menu></my-menu>
+          <my-menu id="nav"></my-menu>
           <!--<div id="nav">
             <router-link to="/">Home</router-link> |
               <router-link to="/about/aboutChild1">About</router-link>

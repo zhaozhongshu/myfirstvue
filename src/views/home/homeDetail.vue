@@ -1,7 +1,7 @@
 <template>
- <div>
+ <div class="mt20">
      <h2 clas="text-center  mb20">新增活动</h2>
- <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm mt20">
+ <el-form :model="ruleForm" :rules="rules" ref="myform" label-width="120px" class="demo-ruleForm mt20">
   <el-form-item label="活动名称" prop="name">
     <el-input v-model="ruleForm.name"></el-input>
   </el-form-item>
@@ -10,6 +10,10 @@
       <el-option label="区域一" value="shanghai"></el-option>
       <el-option label="区域二" value="beijing"></el-option>
     </el-select>
+  </el-form-item>
+  <el-form-item label="选择部门" prop="depart">
+    <department-select :is-multi-select="false"  title="选择部门" v-model="ruleForm.depart"
+        :data = "orgnData"  validate-on-rule-change="false"           v-on:getSelectedData="getSelectedData"></department-select>
   </el-form-item>
   <el-form-item label="活动时间" required>
     <el-col :span="11">
@@ -52,18 +56,27 @@
    
 </template>
 <script>
+import departmentSelect from "@/components/base/departmentSelect";
+import Utils from "@/utils/common.js"
 export default {
+        components: {
+            departmentSelect,
+             Utils
+        },
  data() {
       return {
+        orgnData:[],
         ruleForm: {
           name: '',
           region: '',
+          depart:[],
           date1: '',
           date2: '',
           delivery: false,
           type: [],
           resource: '',
           desc: ''
+          
         },
         rules: {
           name: [
@@ -73,6 +86,7 @@ export default {
           region: [
             { required: true, message: '请选择活动区域', trigger: 'change' }
           ],
+          depart:[ { required: true, message: '请选择部门', trigger: 'change' }],
           date1: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
           ],
@@ -92,6 +106,13 @@ export default {
       };
     },
     methods: {
+       getOrgnData(){
+        this.axios.get("/api/getOrgn").then(res => {
+
+         this.orgnData =   Utils.toTreeList(res.data);
+        
+       });
+    },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -104,10 +125,20 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
+       getSelectedData(data){
+        
+          this.ruleForm.depart = data;
+        this.$refs.myform.validateField('depart');
+         // this.$refs['myform'].validate('depart');
+          
+           console.log(this.ruleForm.depart)
+
+        }
     },
     mounted() {
        $("#nav").hide();
+       this.getOrgnData();
     // this.initFunc();
   }
   

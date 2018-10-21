@@ -97,3 +97,57 @@ html, body ,#app, .el-container,.el-main{
 .el-form-item__content{
     text-align: left!important;
  }
+
+
+/***菜单样式重写**/
+ #my-menu  {
+    .el-submenu__icon-arrow{
+     margin-left: 80px!important;
+    margin-top: -120px!important;
+    }
+  
+}
+.el-menu--horizontal .el-menu .el-submenu__title{
+    padding: 0!important;
+}
+
+#nav-toggle{
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+  }
+  #nav-toggle span { position: absolute; left: 50%; top: 50%; }
+  
+  #nav-toggle span, 
+  #nav-toggle span:before,
+  #nav-toggle span:after {
+    cursor: pointer;
+    border-radius: 1px;
+    height: 4px;
+    width: 25px;
+    background: #007bff;
+    position: absolute;
+    display: block;
+    content: '';
+    left:0;
+  }
+  #nav-toggle span:before {
+    top: -7px;
+  }
+  #nav-toggle span:after {
+    bottom: -7px;
+  }
+    .text-bold{
+      font-weight: bold;;
+    }
+  
+    .form-control:disabled, .form-control[readonly] {
+      background-color: #fbfbfb;
+  }
+
+  .el-dialog__body{
+      padding-top:5px!important;
+  }

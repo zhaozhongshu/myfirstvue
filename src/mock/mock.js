@@ -57,11 +57,11 @@ const menu = [{
 }, {
   id: 2,
   name: "处理中心",
-  url:"/about",
+  url:"",
   children: [{
     id: 21,
     name: "一区",
-    url:'',
+    url:"/about",
   }, {
     id: 22,
     name: "二区",
@@ -77,8 +77,12 @@ const menu = [{
     }]
   }]
 }];
+
+const orgData = [{id:'1',parentId:"",label: '公司'},{id:'11',parentId:"1",label: '部门一'},{id:'21',parentId:"1",label: '部门二'},
+{id:'111',parentId:"11",label: '部门一1'},{id:'112',parentId:"11",label: '部门一2'},{id:'211',parentId:"21",label: '部门二1'}];
 // Mock.mock( url, post/get , 返回的数据)； 
 Mock.mock('/home/getList', 'get', data);
 
 Mock.mock('/api/getUserInfo', 'get', userInfo);
 Mock.mock('/api/getMenu', 'get', menu );
+Mock.mock('/api/getOrgn', 'get', orgData );
