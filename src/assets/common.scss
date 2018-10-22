@@ -47,7 +47,10 @@ table {
 	border-spacing: 0;
 }
 
-html, body ,#app, .el-container,.el-main{
+/*html, body ,#app, .el-container,.el-main{
+    height:100%;
+}*/
+html, body ,#app{
     height:100%;
 }
 

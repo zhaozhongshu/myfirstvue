@@ -4,16 +4,16 @@ export  default{
         var root = [];
         var nodes = {};
         data.forEach(function(x){
-            nodes[x.id] = x;
-            nodes[x.id].children = [];
+            nodes[x.Id] = x;
+            nodes[x.Id].children = [];
         });
         
         data.forEach(function(x){
-            if(x.parentId == "" ) {
-                root = nodes[x.id];
+            if(x.ParentID == "" ) {
+                root = nodes[x.Id];
                 return;
             }
-            nodes[x.parentId].children.push(nodes[x.id]);
+            nodes[x.ParentID].children.push(nodes[x.Id]);
         });
         return [root];
     }

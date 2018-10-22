@@ -63,7 +63,7 @@ export default {
       default:function() {
         return {
           children: 'children',
-          label: 'label'
+          label: 'CNFullName'
         }
       }
     },
@@ -90,10 +90,7 @@ export default {
       },
 
     nodeclicked(node, v,z) {
-       console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-      console.log(node)
-       console.log(v)
-        console.log(z)
+     
       //根据传过来的属性，disable属性
      /* if (this. disableTag != "none" && this. disableTag == node.type) {
         return;
@@ -108,7 +105,7 @@ export default {
       if (this.isMultiSelect) {
         //去重
         var exist = this.selectedData.some(function(it) {
-          return it.id == node.id;
+          return it.Id == node.Id;
         });
         if (!exist) {
           this.selectedData.push(tmpNode);

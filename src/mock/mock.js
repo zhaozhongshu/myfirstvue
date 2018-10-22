@@ -78,11 +78,15 @@ const menu = [{
   }]
 }];
 
-const orgData = [{id:'1',parentId:"",label: '公司'},{id:'11',parentId:"1",label: '部门一'},{id:'21',parentId:"1",label: '部门二'},
-{id:'111',parentId:"11",label: '部门一1'},{id:'112',parentId:"11",label: '部门一2'},{id:'211',parentId:"21",label: '部门二1'}];
+const orgData = [{Id:'1',ParentID:"",CNFullName: '公司'},{Id:'11',ParentID:"1",CNFullName: '部门一'},{Id:'21',ParentID:"1",CNFullName: '部门二'},
+{Id:'111',ParentID:"11",CNFullName: '部门一1'},{Id:'112',ParentID:"11",CNFullName: '部门一2'},
+{Id:'211',ParentID:"21",CNFullName: '部门二1'},{Id:'2111',ParentID:"211",CNFullName: '部门二11'}];
+const userData = [{Id:'1',OrgID:"11",LoginName: 'zhangsan',RealName: '张三'},{Id:'2',OrgID:"111",LoginName: 'zhangsan1',RealName: '张三1'},
+{Id:'3',OrgID:"2111",LoginName: 'zhangsan',RealName: '张三3'},{Id:'4',OrgID:"2111",LoginName: 'zhangsan4',RealName: '张三4'}];
 // Mock.mock( url, post/get , 返回的数据)； 
 Mock.mock('/home/getList', 'get', data);
 
 Mock.mock('/api/getUserInfo', 'get', userInfo);
 Mock.mock('/api/getMenu', 'get', menu );
 Mock.mock('/api/getOrgn', 'get', orgData );
+Mock.mock('/api/getUserData', 'get', userData);

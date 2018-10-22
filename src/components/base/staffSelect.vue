@@ -1,48 +1,50 @@
 <template>
-<div>
-    <div style="position: relative;" ><input  readonly type="text"  class="form-control" >
+<div class="">
+    <div  >
+          <el-input readonly v-model="selectItems"></el-input>
        <a id="nav-toggle" href="#" @click="showSelectWin()"><span></span></a>
-        <div class="select-cnt">{{selectItems}}</div>
+          <!--<div class="select-cnt">{{selectItems}}</div>-->
     </div>
-    <div class="dp-wrap" v-if="showWin">
-        <div class="text-bold">{{title}}</div>
-        <div class="dp-cnt">
+    <el-dialog v-bind:title="title" :visible.sync="showWin" >
+   <div class="dp-cnt">
+          <div  class="mb20" style="width:60%;"><el-input
+                  placeholder="输入关键字进行过滤"
+                  v-model="filterText">
+                </el-input></div>
             <div class="tree-left">
+               
                 <div class="tree-block">
-
-                    <v-tree ref='tree1'  :data='treeData'
-                             @node-click='nodeclicked'
-                           />
+                  
+                  <el-tree   class="filter-tree"  default-expand-all ref='orgTree' :data="orgData"
+                   :props="defaultProps" @node-click="nodeclicked"
+                   :filter-node-method="filterNode"></el-tree>
                 </div>
 
             </div>
-            <div class="select-right ">
+             <div class="select-right ">
             <ul>
-                <li v-for="item in waitSelectData"  @click="selectData(item)">{{item.name}}</li>
+                <li v-for="(item, index) in waitSelectData" v-bind:key="index+''" 
+                  @click="selectData(item)">{{item[defaultProps.selectLabel]}}</li>
             </ul>
             </div>
             <div class="select-oper ">
-              <div style="margin-top:180px;"><button @click="selectAll()"  class="btn btn-default">全选</button></div>
-               <div class="mt20"><button @click="removeAll()" class="btn btn-default">清空</button></div>
+              <div style="margin-top:180px;"><el-button @click="selectAll()" >全选</el-button></div>
+               <div class="mt20"><el-button @click="removeAll()" >清空</el-button></div>
               
            
             </div>
             <div class="select-right">
             <ul>
-                <li  v-for="(item, index) in selectedData"  @click="deleteItems(index)">{{item.name}}</li>
+                <li v-for="(item, index) in selectedData" v-bind:key="index+''" 
+                  @click="deleteItems(index)">{{item[defaultProps.selectLabel]}}</li>
             </ul>
             </div>
-        </div>
-
-        <div class="text-right mt10">
-            <button class="btn btn-default " @click="hideSelectWin()">取消</button>
-             <button class="btn btn-primary ml20" @click="confirmData()">确认</button>
-        </div>
-
-
-
     </div>
-    <div v-if="showWin" class="mask" > </div>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="hideSelectWin()">取 消</el-button>
+    <el-button type="primary" @click="confirmData()">确 定</el-button>
+  </div>
+</el-dialog>
 </div>
    
 </template>
@@ -51,127 +53,87 @@
 export default {
   props: {
     //是否只选择叶子节点，默认是 ture
-    title:{
+    title: {
       type: String,
-      default: '选人'
+      default: "选人"
     },
-    clickType: {
-      type: String,
-      default: 'all'
-    },
+
     //是否多选，默认是多选
     isMultiSelect: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    //tree 默认属性，字段名定制
+    defaultProps: {
+      type: Object,
+      default: function() {
+        return {
+          children: "children",
+          label: "CNFullName",
+          selectLabel: "RealName"
+        };
+      }
     },
     //渲染树的节点，默认部门数据
-    treeData: {
-      type: Array,
-      default: function() {
-        return [
-          {
-            name: "node1",
-            id: "0",
-            expanded: true,
-            children: [
-              {
-                name: "node 1-1",
-                id: "1",
-                children: [
-                  {
-                    name: "node 1-1-1",
-                    id: "11"
-                  },
-                  {
-                    name: "node 1-1-2",
-                      id: "12"
-                  },
-                  {
-                    name: "node 1-1-3",
-                      id: "13"
-                  }
-                ]
-              },
-              {
-                name: "node 1-2",
-                id: "2",
-                children: [
-                  {
-                    name: "node 1-2-1",
-                    id: "21"
-                  },
-                  {
-                    name: "node 1-2-2",
-                    id: "22"
-                  }
-                ]
-              }
-            ]
-          }
-        ];
-      }
+    orgData: {
+      type: Array
+    },
+     userData: {
+      type: Array
     }
   },
   data() {
     return {
+      filterText: "",
       showWin: false,
       searchword: "",
-       waitSelectData: [],
-      selectedData: [],
-      //treeData:[]
+      waitSelectData: [],
+      selectedData: []
     };
   },
   methods: {
-    nodeclicked(node, v) {
-       var walk = function(node, fn) {
-      var children = node["children"];
-      if (!children|| children.length == 0) {
-          fn(node);
-          return;
-      }
-      for (var i = 0; i < children.length; i++) {
-          walk(children[i], fn);
-      }
-  }
-    var handler = (obj)=> {
-                   //去重
-                  var exist = this.waitSelectData.some(function (it) {
-                      return it.id == obj.id;
-                  });
-                  if (exist) {
-                      return;
-                  }
-                  var tmpNode = {}
-                  for (var key in obj) {
-                      if (key != 'children' && key != 'parent' && key != 'selected') {
-                          tmpNode[key] = obj[key]
-                      }
-                  }
-                  this.waitSelectData.push(tmpNode);
-              }
-
-      //当前选中节点 与 定制的可选节点不匹配，则返回
-      if(this.clickType !='all' && this.clickType != node.type){
-        return;
-      }
-     
-     walk(node, handler);
-
-  },
-    selectData(data){
-      if (this.isMultiSelect) {
-          //去重
-              var exist = this.selectedData.some(function (it) {
-                      return it.id == data.id;
-                  });
-                  if (!exist) {
-                     this.selectedData.push(data);
-                  }
-          
+     filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+    nodeclicked( rootNode, v) {
+      // 1.获取节点树下所有的部门id
+      debugger;
+      console.log("sssssssssssssss");
+          console.log(rootNode);
+      var orgs = {};
+      var nodes = [rootNode];
+      while (nodes.length > 0) {
+        var node = nodes.pop();
+        if (node.Id in orgs) {
+          // 避免环
+          continue;
         } else {
-          this.selectedData = [data];
+          orgs[node.Id] = true;
+          node.children.forEach(function(x) {
+            nodes.push(x);
+          });
         }
-
+      }
+      console.log("orgs",orgs);
+      // 2.返回在部门列表中的所有用户
+      this.waitSelectData =  this.userData.filter(function(x) {
+        return x.OrgID in orgs;
+      });
+      console.log("orgs",this.waitSelectData);
+    },
+    selectData(data) {
+      if (this.isMultiSelect) {
+        //去重
+        var exist = this.selectedData.some(function(it) {
+          return it.Id == data.Id;
+        });
+        if (!exist) {
+          this.selectedData.push(data);
+        }
+      } else {
+        this.selectedData = [data];
+      }
     },
     showSelectWin() {
       this.showWin = true;
@@ -182,39 +144,37 @@ export default {
       document.documentElement.style.overflowY = "auto";
     },
     confirmData() {
-       this.$emit('getSelectedData',this.selectedData);
-       this.hideSelectWin();
+      this.$emit("getSelectedData", this.selectedData);
+      this.hideSelectWin();
     },
-    deleteItems(index){
-      this.selectedData.splice(index,1);
+    deleteItems(index) {
+      this.selectedData.splice(index, 1);
     },
-    removeAll(){
+    removeAll() {
       this.selectedData = [];
     },
-    selectAll(){
-       if (this.isMultiSelect) {
-              for(var i=0;i<this.waitSelectData.length;i++){
-                var exist = this.selectedData.some( (it) => {
-                      return it.id == this.waitSelectData[i].id;
-                  });
-                  if (!exist) {
-                     this.selectedData.push(this.waitSelectData[i]);
-                  }
-              }
-             
+    selectAll() {
+      if (this.isMultiSelect) {
+        for (var i = 0; i < this.waitSelectData.length; i++) {
+          var exist = this.selectedData.some(it => {
+            return it.Id == this.waitSelectData[i].Id;
+          });
+          if (!exist) {
+            this.selectedData.push(this.waitSelectData[i]);
+          }
+        }
       }
     }
-          
   },
-   computed:{
-        selectItems(){
-          var arr= [];
-          this.selectedData.forEach(ele => {
-            arr.push(ele.name);
-          });
-           return arr.join(',');
-        }
-     },
+  computed: {
+    selectItems() {
+      var arr = [];
+      this.selectedData.forEach(ele => {
+        arr.push(ele[this.defaultProps.selectLabel]);
+      });
+      return arr.join(",");
+    }
+  },
   mounted() {
     /**/
   }
@@ -222,34 +182,24 @@ export default {
 </script>
 
 <style>
-.dp-wrap {
-  width: 960px;
-  padding: 20px;
-  background: #fff;
-  height: 600px;
-  position: fixed;
-  z-index: 999;
-  top: 50%;
-  left: 50%;
-  margin-top: -300px;
-  margin-left: -480px;
-}
+
 .dp-cnt {
   width: 100%;
-  margin-top: 20px;
-  height: 480px;
+   width: 960px;
+  height: 530px;
 }
 .tree-left,
 .select-right {
   float: left;
   height: 480px;
   overflow: auto;
-  border: 1px solid #bbb;
+  border: 1px solid #ddd;
+  border-radius: 3px;
 }
 .select-oper {
   float: left;
-    width: 80px;
-    padding-left: 10px;
+  width: 80px;
+  padding-left: 10px;
 }
 .tree-left {
   width: 380px;
@@ -273,14 +223,17 @@ export default {
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
 }
-    .select-cnt{
-        position: absolute;
-        left: 5px;
-        top: 10px;
-        /* width: 200px; */
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        right: 45px;
-    }
+.select-cnt {
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  /* width: 200px; */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  right: 45px;
+}
+.el-dialog{
+  width:990px!important;
+}
 </style>

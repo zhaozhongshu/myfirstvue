@@ -15,6 +15,11 @@
     <department-select :is-multi-select="false"  title="选择部门" v-model="ruleForm.depart"
         :data = "orgnData"  validate-on-rule-change="false"           v-on:getSelectedData="getSelectedData"></department-select>
   </el-form-item>
+   <el-form-item label="选择负责人" prop="charger">
+    <staff-select :is-multi-select="false"  title="选择负责人" v-model="ruleForm.charger"
+        :orgData= "orgnData"    :userData= "userData"  v-on:getSelectedData="getChargerData">
+        </staff-select>
+  </el-form-item>
   <el-form-item label="活动时间" required>
     <el-col :span="11">
       <el-form-item prop="date1">
@@ -57,19 +62,23 @@
 </template>
 <script>
 import departmentSelect from "@/components/base/departmentSelect";
+import staffSelect from "@/components/base/staffSelect";
 import Utils from "@/utils/common.js"
 export default {
         components: {
             departmentSelect,
+            staffSelect,
              Utils
         },
  data() {
       return {
         orgnData:[],
+        userData:[],
         ruleForm: {
           name: '',
           region: '',
           depart:[],
+          charger:[],
           date1: '',
           date2: '',
           delivery: false,
@@ -87,6 +96,7 @@ export default {
             { required: true, message: '请选择活动区域', trigger: 'change' }
           ],
           depart:[ { required: true, message: '请选择部门', trigger: 'change' }],
+          charger:[ { required: true, message: '请选择部门', trigger: 'change' }],
           date1: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
           ],
@@ -113,6 +123,12 @@ export default {
         
        });
     },
+     getUserData(){
+        this.axios.get("/api/getUserData").then(res => {
+         this.userData =  res.data;
+        
+       });
+    },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -134,11 +150,18 @@ export default {
           
            console.log(this.ruleForm.depart)
 
-        }
+        },
+        getChargerData(data){
+      
+          this.ruleForm.charger = data;
+        this.$refs.myform.validateField('charger');
+
+        },
     },
     mounted() {
        $("#nav").hide();
        this.getOrgnData();
+       this.getUserData();
     // this.initFunc();
   }
   
