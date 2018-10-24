@@ -9,7 +9,7 @@
 .my-footer{
    height: 60px;
     line-height: 60px;
-    background: #fbfbfb
+    background: #f4f4f4
   
 }
 </style>

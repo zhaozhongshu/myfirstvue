@@ -13,7 +13,7 @@
   </el-form-item>
   <el-form-item label="选择部门" prop="depart">
     <department-select :is-multi-select="false"  title="选择部门" v-model="ruleForm.depart"
-        :data = "orgnData"  validate-on-rule-change="false"           v-on:getSelectedData="getSelectedData"></department-select>
+        :data = "orgnData"            v-on:getSelectedData="getSelectedData"></department-select>
   </el-form-item>
    <el-form-item label="选择负责人" prop="charger">
     <staff-select :is-multi-select="false"  title="选择负责人" v-model="ruleForm.charger"
@@ -51,6 +51,12 @@
   </el-form-item>
   <el-form-item label="活动形式" prop="desc">
     <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+      <!--<quill-editor v-model="ruleForm.desc" style="height:150px;"
+                                  ref="myQuillEditor"
+                                  >
+
+         </quill-editor>-->
+  
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>

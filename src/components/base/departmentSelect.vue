@@ -1,6 +1,6 @@
 <template>
-<div>
-      <div style="position: relative;" >
+<div class="org-select">
+      <div  >
           <el-input readonly v-model="selectItems"></el-input>
        <a id="nav-toggle" href="#" @click="showSelectWin()"><span></span></a>
           <!--<div class="select-cnt">{{selectItems}}</div>-->
@@ -17,7 +17,8 @@
                   
                   <el-tree   class="filter-tree"  default-expand-all ref='orgTree' :data="data"
                    :props="defaultProps" @node-click="nodeclicked"
-                   :filter-node-method="filterNode"></el-tree>
+                   :filter-node-method="filterNode"
+                   :default-expanded-keys="expandNode"></el-tree>
                 </div>
 
             </div>
@@ -29,8 +30,8 @@
             </div>
     </div>
   <div slot="footer" class="dialog-footer">
-    <el-button @click="hideSelectWin()">取 消</el-button>
-    <el-button type="primary" @click="confirmData()">确 定</el-button>
+    <el-button  size="mini" @click="hideSelectWin()">取 消</el-button>
+    <el-button  size="mini" type="primary" @click="confirmData()">确 定</el-button>
   </div>
 </el-dialog>
 
@@ -77,6 +78,7 @@ export default {
        filterText: '',
       showWin: false,
       searchword: "",
+      expandNode:[],
       selectedData: [],
       orgnData:[]
      
@@ -87,6 +89,16 @@ export default {
      filterNode(value, data) {
         if (!value) return true;
         return data.label.indexOf(value) !== -1;
+      },
+      getFistLevelNode(){
+        let that = this;
+        that.data[0].children.forEach(function(item){
+          that.expandNode.push(item.Id);
+        });
+         /*this.data[0].children.forEach((item) => {
+          this.expandNode.push(item.Id);
+        });*/
+
       },
 
     nodeclicked(node, v,z) {
@@ -145,9 +157,11 @@ export default {
         this.$refs.orgTree.filter(val);
       }
     },
-  mounted(){
+  /*updated(){
+    this.getFistLevelNode();
    
-  }
+  },*/
+  //mounted
 };
 </script>
 
@@ -198,5 +212,8 @@ padding:0 10px;
   top: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
+}
+.org-select .el-dialog{
+  width:700px!important;
 }
 </style>

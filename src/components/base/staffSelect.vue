@@ -1,5 +1,5 @@
 <template>
-<div class="">
+<div class="user-select">
     <div  >
           <el-input readonly v-model="selectItems"></el-input>
        <a id="nav-toggle" href="#" @click="showSelectWin()"><span></span></a>
@@ -28,8 +28,8 @@
             </ul>
             </div>
             <div class="select-oper ">
-              <div style="margin-top:180px;"><el-button @click="selectAll()" >全选</el-button></div>
-               <div class="mt20"><el-button @click="removeAll()" >清空</el-button></div>
+              <div style="margin-top:180px;"><el-button size="mini"  @click="selectAll()" >全选</el-button></div>
+               <div class="mt20"><el-button  size="mini" @click="removeAll()" >清空</el-button></div>
               
            
             </div>
@@ -41,8 +41,8 @@
             </div>
     </div>
   <div slot="footer" class="dialog-footer">
-    <el-button @click="hideSelectWin()">取 消</el-button>
-    <el-button type="primary" @click="confirmData()">确 定</el-button>
+    <el-button  size="mini" @click="hideSelectWin()">取 消</el-button>
+    <el-button  size="mini" type="primary" @click="confirmData()">确 定</el-button>
   </div>
 </el-dialog>
 </div>
@@ -233,7 +233,7 @@ export default {
   text-overflow: ellipsis;
   right: 45px;
 }
-.el-dialog{
+.user-select .el-dialog{
   width:990px!important;
 }
 </style>
